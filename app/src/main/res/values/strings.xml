@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">星座梦缘</string>
+    <string name="label_star">星座</string>
+    <string name="label_partner">配对</string>
+    <string name="label_luck">运势</string>
+    <string name="label_me">我的</string>
+</resources>
