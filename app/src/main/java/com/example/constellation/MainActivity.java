@@ -8,10 +8,14 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.RadioGroup;
 
+import com.example.constellation.bean.StarInfoBean;
+import com.example.constellation.utils.AssetsUtils;
+import com.google.gson.Gson;
+
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener{
     //实现类
     RadioGroup mainRg;
-    //生命四个按钮对应的Fragment对象
+    //声明四个按钮对应的Fragment对象
     Fragment starFrag,luckFrag,partnerFrag,meFrag;
     private FragmentManager manager;
 
@@ -22,15 +26,33 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         mainRg =findViewById(R.id.main_rg);
         //设置监听点击了哪个单选按钮
         mainRg.setOnCheckedChangeListener(this);
-       //创建碎片对象
+//        加载星座相关数据 /assets/xzcontent/xzcontent.json
+        StarInfoBean infoBean = loadData();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("indo",infoBean);
+
+        //创建碎片对象
         starFrag =new StarFragment();
+        starFrag.setArguments(bundle);
         luckFrag = new LuckFragment();
+        luckFrag.setArguments(bundle);
         partnerFrag =new PartnerFragment();
+        partnerFrag.setArguments(bundle);
         meFrag =new MeFragment();
+        meFrag.setArguments(bundle);
         //将四个FRAGMENT进行动态加载，一起加载到布局中 。replace add/hide/show
         addFragmentPage();
     }
-   /**
+//读取assets文件夹下的xzcontent.json文件
+    private StarInfoBean loadData() {
+        String json = AssetsUtils.getJsonFromAssets(this, "xzcontent/xzcontent.json");
+        Gson gson = new Gson();
+        StarInfoBean infoBean = gson.fromJson(json, StarInfoBean.class);
+        AssetsUtils.saveBitmapFromAssets(this,infoBean);
+        return infoBean;
+    }
+
+    /**
     * @des 将主页当中的碎片一起加载进入布局 有用的显示，暂时无用的隐藏**/
 
     private void addFragmentPage() {
